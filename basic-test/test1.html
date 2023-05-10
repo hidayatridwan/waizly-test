@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test 1</title>
+  </head>
+  <body></body>
+  <script>
+    const array = [1, 3, 5, 7, 9];
+
+    function minMaxSum() {
+      const arrayMin = array.slice(0, 4);
+      const arrayMax = array.slice(-4);
+      const result = [arrayMin, arrayMax].map((arrayNumber) => {
+        return sumArrayOfNumbers(arrayNumber);
+      });
+
+      return result.join(" ");
+    }
+
+    function sumArrayOfNumbers(arrayNumber) {
+      return arrayNumber.reduce((prevValue, currValue) => {
+        return prevValue + currValue;
+      });
+    }
+
+    document.writeln(minMaxSum());
+  </script>
+</html>

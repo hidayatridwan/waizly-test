@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test 2</title>
+  </head>
+  <body></body>
+  <script>
+    const array = [-4, 3, -9, 0, 4, 1];
+
+    const positiveNumbers = array.filter((number) => number > 0).length;
+    const negativeNumbers = array.filter((number) => number < 0).length;
+    const zeroNumbers = array.filter((number) => number == 0).length;
+
+    [positiveNumbers, negativeNumbers, zeroNumbers].forEach((number) =>
+      document.writeln(`${(number / array.length).toFixed(6)}<br>`)
+    );
+  </script>
+</html>

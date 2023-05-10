@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <title>Test 3</title>
+  </head>
+  <body></body>
+  <script>
+    const stringPM = "12:01:00PM";
+    const stringAM = "12:01:00AM";
+
+    const convertPM = `${moment(stringPM, "h:m:sA").format("HH:mm:ss")}<br>`;
+    const convertAM = `${moment(stringAM, "h:m:sA").format("HH:mm:ss")}<br>`;
+    document.writeln(convertPM);
+    document.writeln(convertAM);
+  </script>
+</html>
