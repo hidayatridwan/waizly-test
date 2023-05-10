@@ -2,15 +2,21 @@
 
 namespace RidwanHidayat\BackendTest\Repository;
 
+use Monolog\Handler\StreamHandler;
 use PDO;
+use RidwanHidayat\BackendTest\Controller\TaskController;
 use RidwanHidayat\BackendTest\Domain\Task;
+use Monolog\Logger;
 
 class TaskRepository
 {
     private PDO $connection;
+    private Logger $logger;
 
     public function __construct(PDO $connection)
     {
+        $this->logger = new Logger(TaskController::class);
+        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../logs/application.log'));
         $this->connection = $connection;
     }
 
@@ -33,6 +39,7 @@ class TaskRepository
             if ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 return $row;
             } else {
+                $this->logger->warning('Unauthorized');
                 return null;
             }
         } finally {
@@ -98,6 +105,7 @@ class TaskRepository
 
                 return $task;
             } else {
+                $this->logger->info('Task not found');
                 return null;
             }
         } finally {

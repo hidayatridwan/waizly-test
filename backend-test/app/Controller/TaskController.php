@@ -2,19 +2,24 @@
 
 namespace RidwanHidayat\BackendTest\Controller;
 
+use Monolog\Handler\StreamHandler;
 use RidwanHidayat\BackendTest\Config\Database;
 use RidwanHidayat\BackendTest\Helper\Helper;
 use RidwanHidayat\BackendTest\Model\TaskRequest;
 use RidwanHidayat\BackendTest\Repository\TaskRepository;
 use RidwanHidayat\BackendTest\Service\TaskService;
 use Exception;
+use Monolog\Logger;
 
 class TaskController
 {
     private TaskService $taskService;
+    private Logger $logger;
 
     public function __construct()
     {
+        $this->logger = new Logger(TaskController::class);
+        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../logs/application.log'));
         $connection = Database::getConnection();
         $taskRepository = new TaskRepository($connection);
         $this->taskService = new TaskService($taskRepository);
@@ -26,6 +31,7 @@ class TaskController
         Helper::parseToArray();
 
         if (!isset($_POST['username']) || !isset($_POST['password'])) {
+            $this->logger->info('Invalid arguments');
             $response = [
                 'message' => 'Invalid arguments'
             ];
@@ -42,6 +48,7 @@ class TaskController
             ];
             http_response_code(200);
         } else {
+            $this->logger->warning('Failed to get token');
             $response = [
                 'message' => 'Failed to get token'
             ];
@@ -65,6 +72,7 @@ class TaskController
             ];
             http_response_code(201);
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
             $response = [
                 'error' => $exception->getMessage()
             ];
@@ -97,6 +105,7 @@ class TaskController
             ];
             http_response_code(200);
         } else {
+            $this->logger->info('Task not found');
             $response = [
                 'message' => 'Task not found'
             ];
@@ -123,6 +132,7 @@ class TaskController
             ];
             http_response_code(200);
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
             $response = [
                 'error' => $exception->getMessage()
             ];
@@ -145,6 +155,7 @@ class TaskController
             ];
             http_response_code(200);
         } else {
+            $this->logger->info('Task not found');
             $response = [
                 'error' => 'Task not found'
             ];

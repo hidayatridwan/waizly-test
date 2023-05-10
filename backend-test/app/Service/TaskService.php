@@ -2,6 +2,8 @@
 
 namespace RidwanHidayat\BackendTest\Service;
 
+use Monolog\Handler\StreamHandler;
+use RidwanHidayat\BackendTest\Controller\TaskController;
 use RidwanHidayat\BackendTest\Domain\Task;
 use RidwanHidayat\BackendTest\Exception\ValidationException;
 use RidwanHidayat\BackendTest\Model\TaskRequest;
@@ -9,13 +11,17 @@ use RidwanHidayat\BackendTest\Model\TaskResponse;
 use RidwanHidayat\BackendTest\Repository\TaskRepository;
 use Firebase\JWT\JWT;
 use RidwanHidayat\BackendTest\Helper\Helper;
+use Monolog\Logger;
 
 class TaskService
 {
     private TaskRepository $taskRepository;
+    private Logger $logger;
 
     public function __construct(TaskRepository $taskRepository)
     {
+        $this->logger = new Logger(TaskController::class);
+        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../logs/application.log'));
         $this->taskRepository = $taskRepository;
     }
 
@@ -33,6 +39,7 @@ class TaskService
     private function validateTaskRequest(TaskRequest $request): void
     {
         if (!isset($request->title)) {
+            $this->logger->info('Invalid arguments');
             throw new ValidationException('Invalid arguments');
         } else if ($request->title == null || trim($request->title) == '') {
             throw new ValidationException('Title do not blank');
@@ -71,7 +78,8 @@ class TaskService
 
         $check = $this->taskRepository->findById($request->id);
         if ($check == null) {
-            throw new ValidationException('Task not found!');
+            $this->logger->info('Task not found');
+            throw new ValidationException('Task not found');
         }
 
         $task = new Task();
